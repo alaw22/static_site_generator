@@ -28,7 +28,7 @@ class HTMLNode:
 # Child class of HTMLNode with no children of itself
 class LeafNode(HTMLNode):
     def __init__(self,tag,value,props=None):
-        if value is None or not isinstance(value,str) or value == "":
+        if value is None or not isinstance(value,str):
             raise ValueError("All LeafNode must have a value")
         if tag is not None and (not isinstance(tag, str) or tag == ""):
             raise ValueError("Tag must be None or a non-empty string")

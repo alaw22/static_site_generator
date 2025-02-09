@@ -84,14 +84,23 @@ class TestParentNode(unittest.TestCase):
         self.assertEqual(node.to_html(),result)
 
     def test_multiple_parents(self):
-        # NOT FINISHED YET
         node = ParentNode(
-            "p",
+            "div",
             [
                 LeafNode("b", "Bold text"),
                 LeafNode(None, "Normal text"),
                 LeafNode("i", "italic text"),
                 LeafNode(None, "Normal text"),
-                ParentNode("p",)
+                ParentNode(
+                           "p",
+                           [
+                               LeafNode("a","This link",props={"href":"www.google.com"}),
+                               LeafNode("b","some bold text")
+                           ]
+                           )
             ],
         )
+        
+        output = '<div><b>Bold text</b>Normal text<i>italic text</i>Normal text<p><a href="www.google.com">This link</a><b>some bold text</b></p></div>'
+        self.assertEqual(output,node.to_html())
+
