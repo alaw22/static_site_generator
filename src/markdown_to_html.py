@@ -2,6 +2,7 @@ from block_markdown import *
 from textnode import *
 from inline_markdown import *
 from htmlnode import *
+import re 
 
 
 def header_block_to_tag(header_block):
@@ -19,16 +20,18 @@ def header_block_to_tag(header_block):
 def list_block_to_leafnodes(split_block, block_type):
     match block_type:
         case BlockType.UNORDERED:
-            chars = "*- "
+            regex = r"^[\*\-]\s+(.+)"
         case BlockType.ORDERED:
-            chars = "123456789. "
+            regex = r"^[0-9]+\.\s+(.+)"
         case _:
             raise Exception(f"Got unexpected block type {block_type}")
         
     list_items = []
     for item in split_block:
-        stripped = item.lstrip(chars) # this may be a problem if there is bold or italic text to start
-        list_items.append(LeafNode("li",stripped))
+        # stripped = item.lstrip(chars) # this may be a problem if there is bold or italic text to start
+        match = re.match(regex,item)
+        if match:
+            list_items.append(LeafNode("li",match.group(1)))
 
     return list_items
 
@@ -42,6 +45,16 @@ def markdown_block_to_html_node(block,block_type):
         case BlockType.HEADING:
             return LeafNode(header_block_to_tag(block),block.lstrip("# "))
         case BlockType.CODE:
+            print(block)
+            # I could instead use a regex here because I don't want to capture a empty space + \n
+            '''
+                ```
+                print("Lord")
+                print("of")
+                print("the")
+                print("Rings")
+                ```
+            '''
             return LeafNode("code",block.strip("`"))
         case BlockType.QUOTE:
             list_items = []
@@ -68,7 +81,7 @@ def text_to_children(text):
     return children
 
 
-def markdown_to_html(markdown):
+def markdown_to_html_node(markdown):
 
     # convert to blocks
     blocks = markdown_to_blocks(markdown)
@@ -79,7 +92,7 @@ def markdown_to_html(markdown):
 
         temp = []
         if html_node.children:
-            for child in html_node:
+            for child in html_node.children:
                 grandchildren = text_to_children(child.value)
                 temp.append(ParentNode(child.tag,grandchildren))
         elif html_node.value:

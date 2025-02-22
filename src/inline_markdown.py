@@ -12,6 +12,16 @@ def extract_markdown_links(text):
     regex = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
     return re.findall(regex,text)
 
+def extract_title(text):
+    regex = r"^\s*?#{1}\s+(.+)\s*"
+    h1_list = re.findall(regex,text,re.MULTILINE)
+    if len(h1_list) == 0:
+        raise Exception("There is no h1 header")
+    elif len(h1_list) > 1:
+        print("There is more than one h1 header in your file. Only using the first")
+
+    return h1_list[0].strip()
+
 # split methods
 
 # This function does not support multple nesting so italic

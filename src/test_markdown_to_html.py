@@ -1,4 +1,4 @@
-from markdown_to_html import markdown_to_html
+from markdown_to_html import markdown_to_html_node
 import unittest
 
 class TestMarkdownToHTML(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestMarkdownToHTML(unittest.TestCase):
             answer = answer_file.read()
         
         self.maxDiff = None
-        parent_node = markdown_to_html(markdown_contents)
+        parent_node = markdown_to_html_node(markdown_contents)
         self.assertEqual(answer,parent_node.to_html())
 
         # print(parent_node.to_html())

@@ -326,3 +326,42 @@ class TestTextToNodes(unittest.TestCase):
                      TextNode("link with code", TextType.CODE),
                      TextNode("](www.haha.com)", TextType.TEXT)]
         self.assertEqual(inline_markdown.text_to_textnodes(text),expected)
+
+
+class TestExtractTitle(unittest.TestCase):
+    def test_space_before_hash(self):
+        text = """      # hell this is what it is
+        
+                This is my story
+        """
+
+        self.assertEqual(inline_markdown.extract_title(text),"hell this is what it is")
+
+    def test_no_space_before_text(self):
+        text = """#INTRODUCTION
+
+        a long long time ago in a galaxy far away
+        """
+
+        with self.assertRaises(Exception):
+            inline_markdown.extract_title(text)
+
+    def test_multiple_h1(self):
+        text = """# intro
+                # hello there
+                ## goodnight
+        """
+
+        self.assertEqual(inline_markdown.extract_title(text),"intro")
+
+    def test_h1_header_after_h2(self):
+        text = """## hello there
+                # intro"""
+    
+        self.assertEqual(inline_markdown.extract_title(text),"intro")
+
+    def test_space_before_header(self):
+        text = """          #       I am somewhat of a 
+        scientist myself"""
+
+        self.assertEqual(inline_markdown.extract_title(text),"I am somewhat of a")
