@@ -22,7 +22,10 @@
 7. Thorin
 8. Sauron
 9. Aragorn
-10. Gimli
+
+> "I actually take issue with this list. I could maybe understand Gimli not 
+>  being in the top 5, but to not even list him? That is sacreligous" -- me
+
 
 Here's what `elflang` looks like (the perfect coding language):
 
@@ -31,3 +34,5 @@ func main(){
     fmt.Println("Hello, World!")
 }
 ```
+
+Also LOTR is not the only [great](/dune) Fantasy series of our time.
